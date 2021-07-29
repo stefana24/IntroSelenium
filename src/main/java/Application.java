@@ -6,18 +6,21 @@ import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
+
 public class Application {
     private static final String location = "drivers\\chromedriver.exe";
+    private static final String chromeDriver = "webdriver.chrome.driver";
+    private static final String madisonUrl = "http://qa2.dev.evozon.com/";
 
     public static WebDriver init(){
-        System.setProperty("webdriver.chrome.driver", location);
+        System.setProperty(chromeDriver, location);
         WebDriver driver = new ChromeDriver();
         return driver;
     }
 
     public static void testHomepage(){
         WebDriver driver = init();
-        driver.navigate().to("http://qa2.dev.evozon.com/");
+        driver.navigate().to(madisonUrl);
 
         String title = driver.getTitle();
         System.out.println(title);
@@ -27,7 +30,7 @@ public class Application {
         WebElement element = driver.findElement(By.className("large"));
         element.click();
 
-        driver.navigate().to("http://qa2.dev.evozon.com/women/pants-denim.html");
+        driver.navigate().to(madisonUrl+"women/pants-denim.html");
 
         driver.navigate().back();
 
@@ -35,64 +38,93 @@ public class Application {
 
         driver.navigate().refresh();
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         driver.quit();
     }
 
     public static void testAccount(){
         WebDriver driver = init();
-        driver.navigate().to("http://qa2.dev.evozon.com/");
-        WebElement element = driver.findElement(By.cssSelector(".account-cart-wrapper a.skip-link.skip-account"));
+        driver.navigate().to(madisonUrl);
+        WebElement element = driver.findElement(By.cssSelector("#header > div > div.skip-links > div"));
         element.click();
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         driver.quit();
 
     }
 
     public static void testLanguages(){
         WebDriver driver = init();
-        driver.navigate().to("http://qa2.dev.evozon.com/");
+        driver.navigate().to(madisonUrl);
 
         List<WebElement> elements = driver.findElements(By.cssSelector("#select-language option"));
         for(WebElement webElement: elements)
             System.out.println(webElement.getText());
 
-        WebElement element = driver.findElement(By.cssSelector("#select-language"));
+        WebElement element = driver.findElement(By.id("select-language"));
         Select select = new Select(element);
         select.selectByIndex(1);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         driver.quit();
     }
 
-    public static void testSearch(){
+    public static void testSearch() {
         WebDriver driver = init();
-        driver.navigate().to("http://qa2.dev.evozon.com/");
+        driver.navigate().to(madisonUrl);
 
         WebElement element = driver.findElement(By.id("search"));
         element.clear();
 
         String enteredText="woman";
 
-        WebElement element_enter = driver.findElement(By.xpath("//*[@id=\"search\"]"));
 
-        element_enter.findElement(By.xpath("/html/body/div/div[2]/header/div/div[4]/form/div[1]/input")).sendKeys(enteredText);
+        driver.findElement(By.cssSelector(".input-text.required-entry")).sendKeys(enteredText);
+
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
         driver.quit();
     }
 
-    public static void testNewProductList(){
+    public static void testNewProductList()  {
         WebDriver driver = init();
-        driver.navigate().to("http://qa2.dev.evozon.com/");
+        driver.navigate().to(madisonUrl);
 
         List<WebElement> elements = driver.findElements(By.cssSelector(".widget-products ul .item.last"));
         System.out.println("The number of new products: "+elements.size());
         for(WebElement webElement: elements)
             System.out.println(webElement.getText());
 
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         driver.quit();
     }
 
-    public static void testNavigation() throws InterruptedException {
+    public static void testNavigation() {
         WebDriver driver = init();
-        driver.navigate().to("http://qa2.dev.evozon.com/");
+        driver.navigate().to(madisonUrl);
 
         List<WebElement> elements = driver.findElements(By.cssSelector("#nav"));
         for(WebElement webElement: elements)
@@ -101,18 +133,22 @@ public class Application {
         WebElement element = driver.findElement(By.cssSelector("#nav > ol > li.level0.nav-5.parent > a"));
         element.click();
 
-        Thread.sleep(2000);
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         driver.quit();
     }
 
 
-    public static void main(String[]args) throws InterruptedException {
+    public static void main(String[]args){
         //testHomepage();
         //testAccount();
         //testLanguages();
         //testSearch();
-        //testNewProductList();
-
-        testNavigation();
+        testNewProductList();
+        //testNavigation();
     }
 }
